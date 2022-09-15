@@ -1,10 +1,10 @@
 import puppeteer from 'puppeteer';
 
 const memoizedFileExtensions = {};
-const dayInMilliseconds = 86400000;
-//const dayInMilliseconds = 30000; // testing using 30 seconds
+// const dayInMilliseconds = 86400000;
+const dayInMilliseconds = 30000; // testing using 30 seconds
 
-const getIconURL = async (req, res) => {
+const details = async (req, res) => {
 	const { extension } = req.query;
 
 	if (memoizedFileExtensions[extension]) {
@@ -32,14 +32,17 @@ const getIconURL = async (req, res) => {
 				timeout: 0,
 			});
 
-			const extIcons = await page.$$eval('.entryIcon', (imgs) => {
+			const extIconArr = await page.$$eval('.entryIcon', (imgs) => {
 				return imgs.map((img) => ({
 					normal: img.getAttribute('data-bg'),
 					large: img.getAttribute('data-bg-lg'),
 				}));
 			});
+			const extFullNameArr = await page.$$eval('.title', (titles) => {
+				return titles.map((title) => title.innerHTML);
+			});
 
-			if (extIcons.length == 0) {
+			if (extIconArr.length == 0 || extFullNameArr.length == 0) {
 				const json = { message: 'File extension could not be found' };
 				memoizedFileExtensions[extension] = {
 					json,
@@ -47,7 +50,10 @@ const getIconURL = async (req, res) => {
 				};
 				res.status(400).json(json);
 			} else {
-				const json = extIcons[0];
+				const json = {
+					icons: extIconArr[0],
+					fullName: extFullNameArr[0],
+				};
 				memoizedFileExtensions[extension] = {
 					json,
 					lastRetrieved: Date.now(),
@@ -57,7 +63,7 @@ const getIconURL = async (req, res) => {
 		});
 };
 
-export default getIconURL;
+export default details;
 
 // refreshes in case urls change
 const refreshMemo = async (extension) => {
@@ -81,14 +87,17 @@ const refreshMemo = async (extension) => {
 				timeout: 0,
 			});
 
-			const extIcons = await page.$$eval('.entryIcon', (imgs) => {
+			const extIconArr = await page.$$eval('.entryIcon', (imgs) => {
 				return imgs.map((img) => ({
 					normal: img.getAttribute('data-bg'),
 					large: img.getAttribute('data-bg-lg'),
 				}));
 			});
+			const extFullNameArr = await page.$$eval('.title', (titles) => {
+				return titles.map((title) => title.innerHTML);
+			});
 
-			if (extIcons.length == 0) {
+			if (extIconArr.length == 0 || extFullNameArr.length == 0) {
 				const json = { message: 'File extension could not be found' };
 				memoizedFileExtensions[extension] = {
 					json,
@@ -96,12 +105,15 @@ const refreshMemo = async (extension) => {
 				};
 				// res.status(400).json(json);
 			} else {
-				const json = extIcons[0];
+				const json = {
+					icons: extIconArr[0],
+					fullName: extFullNameArr[0],
+				};
 				memoizedFileExtensions[extension] = {
 					json,
 					lastRetrieved: Date.now(),
 				};
-				//res.status(200).json(json);
+				// res.status(200).json(json);
 			}
 		});
 };
