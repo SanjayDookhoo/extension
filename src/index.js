@@ -4,16 +4,10 @@ import cors from 'cors';
 import details from './details.js';
 import puppeteer from 'puppeteer';
 
-export let browser;
-
-puppeteer
-	.launch({
-		headless: true,
-		timeout: 0,
-	})
-	.then(async (_browser) => {
-		browser = _browser;
-	});
+export const browser = await puppeteer.launch({
+	headless: true,
+	timeout: 0,
+});
 
 const { PORT } = process.env;
 
