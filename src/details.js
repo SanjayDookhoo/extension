@@ -30,6 +30,7 @@ const puppeteerLaunch = ({ extension, res }) => {
 	puppeteer
 		.launch({
 			headless: true,
+			timeout: 0,
 		})
 		.then(async (browser) => {
 			const page = await browser.newPage();
@@ -74,5 +75,6 @@ const puppeteerLaunch = ({ extension, res }) => {
 						.json(json);
 				}
 			}
+			browser.close();
 		});
 };
