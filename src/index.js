@@ -5,7 +5,7 @@ import details from './details.js';
 import puppeteer from 'puppeteer';
 
 export const browser = await puppeteer.launch({
-	// executablePath: '/usr/bin/google-chrome', // needed for Dockerfile https://github.com/puppeteer/puppeteer/issues/3698
+	// executablePath: '/usr/bin/google-chrome', // https://dev.to/cloudx/how-to-use-puppeteer-inside-a-docker-container-568c
 	headless: true,
 	args: ['--no-sandbox'],
 	timeout: 0,
