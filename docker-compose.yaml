@@ -1,0 +1,8 @@
+# docker build -t extension .
+version: "3.5"
+services:
+  extension:
+    image: extension
+    restart: always
+    ports:
+    - "${PORT}:${PORT}"
