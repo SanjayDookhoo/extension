@@ -4,14 +4,14 @@ import cors from 'cors';
 import details from './details.js';
 import puppeteer from 'puppeteer';
 
+const { PORT, ENV_TYPE } = process.env;
+
 export const browser = await puppeteer.launch({
-	executablePath: '/usr/bin/google-chrome', // https://dev.to/cloudx/how-to-use-puppeteer-inside-a-docker-container-568c
+	executablePath: ENV_TYPE == 'development' ? '' : '/usr/bin/google-chrome', // https://dev.to/cloudx/how-to-use-puppeteer-inside-a-docker-container-568c
 	headless: true,
 	args: ['--no-sandbox'],
 	timeout: 0,
 });
-
-const { PORT } = process.env;
 
 const app = express();
 
