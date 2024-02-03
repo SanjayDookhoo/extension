@@ -1,4 +1,4 @@
-import { browser } from '.';
+import { browser } from './index.js';
 
 const memoizedFileExtensions = {};
 const secondsBeforeRefresh = 2592000; // default is seconds for 30 days, this is the default max age given from fileinfo on one of the file extension images
