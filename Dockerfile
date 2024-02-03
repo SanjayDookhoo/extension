@@ -1,6 +1,6 @@
 # https://dev.to/cloudx/how-to-use-puppeteer-inside-a-docker-container-568c
 
-FROM node:20-slim
+FROM node:20-alpine
 
 # We don't need the standalone Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
